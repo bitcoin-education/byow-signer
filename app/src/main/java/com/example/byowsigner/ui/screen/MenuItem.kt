@@ -23,10 +23,14 @@ object CreateWalletMenu : MenuItem {
     override val route: String = "create_wallet"
     override val title: String = "New Wallet"
 }
+object SignTransactionMenu : MenuItem {
+    override val route: String = "sign_transaction"
+    override val title: String = "Sign Transaction"
+}
 
 interface MenuItem {
     val route: String
     val title: String
 }
 
-val menuItems = listOf(CreateWalletMenu)
+val menuItems = listOf(CreateWalletMenu, SignTransactionMenu)

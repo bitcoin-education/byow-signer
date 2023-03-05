@@ -3,5 +3,10 @@ package com.example.byowsigner
 import android.app.Application
 
 class ByowApplication : Application() {
-    val appContainer = AppContainer()
+    lateinit var appContainer: AppContainer
+
+    override fun onCreate() {
+        super.onCreate()
+        appContainer = AppContainer(applicationContext)
+    }
 }

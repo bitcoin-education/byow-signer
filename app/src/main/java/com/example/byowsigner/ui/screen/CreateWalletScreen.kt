@@ -21,20 +21,25 @@ fun CreateWalletScreen(
     modifier: Modifier = Modifier,
     createWalletViewModel: CreateWalletViewModel
 ) {
-    val state = createWalletViewModel.walletUIState.value
+    val state = createWalletViewModel.walletUIState
     val localFocus = LocalFocusManager.current
 
-    Column(modifier = modifier.padding(15.dp).verticalScroll(rememberScrollState())) {
+    Column(modifier = modifier
+        .padding(15.dp)
+        .verticalScroll(rememberScrollState())) {
+
         Text(text = "Create a New Wallet", style = MaterialTheme.typography.titleLarge)
         WalletFormInput(
-            text = state.name,
+            text = state.value.name,
             onTextChanged = {
                 createWalletViewModel.onEvent(CreateWalletUIEvent.NameChanged(it))
             },
             label = "Wallet Name",
             imeAction = ImeAction.Done,
             onDone = { localFocus.clearFocus() },
-            modifier = Modifier.padding(vertical = 15.dp)
+            modifier = Modifier
+                .padding(vertical = 15.dp)
+                .semantics { this.contentDescription = "Wallet Name" }
         )
 
         ElevatedButton(
@@ -49,7 +54,7 @@ fun CreateWalletScreen(
             Modifier
                 .fillMaxWidth()
                 .height(150.dp)) {
-            Text(state.mnemonicSeed, modifier = Modifier
+            Text(state.value.mnemonicSeed, modifier = Modifier
                 .padding(10.dp)
                 .semantics { this.contentDescription = "Mnemonic Seed Words" })
         }

@@ -15,10 +15,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.byowsigner.ui.domain.CreateWalletUIEvent
 import com.example.byowsigner.ui.viewmodels.CreateWalletViewModel
+import com.example.byowsigner.ui.viewmodels.SignTransactionViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ByowHome(modifier: Modifier = Modifier, createWalletViewModel: CreateWalletViewModel) {
+fun ByowHome(
+    modifier: Modifier = Modifier,
+    createWalletViewModel: CreateWalletViewModel,
+    signTransactionViewModel: SignTransactionViewModel
+) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
@@ -31,11 +36,15 @@ fun ByowHome(modifier: Modifier = Modifier, createWalletViewModel: CreateWalletV
                 is CreateWalletUIEvent.CancelButtonClicked -> {
                     navController.navigateSingleTopTo(mainScreenRoute)
                 }
+                is CreateWalletUIEvent.CreateButtonClicked -> {
+                    navController.navigateSingleTopTo(mainScreenRoute)
+                }
                 else -> {}
             }
         }
     }
 
+    NewWalletToast(signTransactionViewModel.wallets)
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -67,6 +76,9 @@ fun ByowHome(modifier: Modifier = Modifier, createWalletViewModel: CreateWalletV
                 }
                 composable(route = CreateWalletMenu.route) {
                     CreateWalletScreen(createWalletViewModel = createWalletViewModel)
+                }
+                composable(route = SignTransactionMenu.route) {
+                    SignTransactionScreen(signTransactionViewModel = signTransactionViewModel)
                 }
             }
         }

@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.byowsigner.ui.domain.CreateWalletUIEvent
+import com.example.byowsigner.ui.domain.SignTransactionUIEvent
 import com.example.byowsigner.ui.viewmodels.CreateWalletViewModel
 import com.example.byowsigner.ui.viewmodels.SignTransactionViewModel
 import kotlinx.coroutines.launch
@@ -39,6 +40,15 @@ fun ByowHome(
                 is CreateWalletUIEvent.CreateButtonClicked -> {
                     navController.navigateSingleTopTo(mainScreenRoute)
                 }
+                else -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = context) {
+        signTransactionViewModel.sharedEvent.collect { event ->
+            when(event) {
+                is SignTransactionUIEvent.CancelButtonClicked -> navController.navigateSingleTopTo(mainScreenRoute)
                 else -> {}
             }
         }
@@ -79,6 +89,9 @@ fun ByowHome(
                 }
                 composable(route = SignTransactionMenu.route) {
                     SignTransactionScreen(signTransactionViewModel = signTransactionViewModel)
+                }
+                composable(route = ExportWatchOnlyWalletMenu.route) {
+                    ExportWatchOnlyWalletScreen(wallets = signTransactionViewModel.wallets)
                 }
             }
         }

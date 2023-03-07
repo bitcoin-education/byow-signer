@@ -15,4 +15,7 @@ interface WalletDao {
 
     @Insert
     suspend fun insertAll(vararg wallets: Wallet)
+
+    @Query("SELECT * FROM wallets WHERE name = :name")
+    fun findByName(name: String): Flow<Wallet>
 }

@@ -2,6 +2,8 @@ package com.example.byowsigner.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -54,9 +56,11 @@ fun CreateWalletScreen(
             Modifier
                 .fillMaxWidth()
                 .height(150.dp)) {
-            Text(state.value.mnemonicSeed, modifier = Modifier
-                .padding(10.dp)
-                .semantics { this.contentDescription = "Mnemonic Seed Words" })
+            SelectionContainer {
+                Text(state.value.mnemonicSeed, modifier = Modifier
+                    .padding(10.dp)
+                    .semantics { this.contentDescription = "Mnemonic Seed Words" })
+            }
         }
         Row {
             ElevatedButton(onClick = { createWalletViewModel.onEvent(CreateWalletUIEvent.CreateButtonClicked) }, modifier = Modifier.padding(vertical = 15.dp)) {

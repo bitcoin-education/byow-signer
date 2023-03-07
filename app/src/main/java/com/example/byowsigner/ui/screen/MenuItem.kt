@@ -27,10 +27,13 @@ object SignTransactionMenu : MenuItem {
     override val route: String = "sign_transaction"
     override val title: String = "Sign Transaction"
 }
-
+object ExportWatchOnlyWalletMenu : MenuItem {
+    override val route: String = "export_wallet"
+    override val title: String = "Export Extended Pubkeys"
+}
 interface MenuItem {
     val route: String
     val title: String
 }
 
-val menuItems = listOf(CreateWalletMenu, SignTransactionMenu)
+val menuItems = listOf(CreateWalletMenu, SignTransactionMenu, ExportWatchOnlyWalletMenu)

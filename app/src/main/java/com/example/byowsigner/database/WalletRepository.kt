@@ -9,6 +9,8 @@ class WalletRepository(private val walletDao: WalletDao) {
 
     fun getWallets() = walletDao.getAll()
 
+    fun findWalletByName(name: String) = walletDao.findByName(name)
+
     fun insertWallet(wallet: Wallet) {
         coroutineScope.launch(Dispatchers.IO) {
             walletDao.insertAll(wallet)

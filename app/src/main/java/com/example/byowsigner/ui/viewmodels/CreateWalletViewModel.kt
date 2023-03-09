@@ -41,6 +41,9 @@ class CreateWalletViewModel(
             is CreateWalletUIEvent.CancelButtonClicked -> {
                 cancel()
             }
+            is CreateWalletUIEvent.MnemonicSeedChanged -> {
+                _walletUIState.value = _walletUIState.value.copy(mnemonicSeed = event.value)
+            }
         }
     }
 

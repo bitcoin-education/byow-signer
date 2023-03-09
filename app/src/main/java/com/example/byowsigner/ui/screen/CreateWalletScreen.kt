@@ -3,11 +3,14 @@ package com.example.byowsigner.ui.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -56,11 +59,20 @@ fun CreateWalletScreen(
             Modifier
                 .fillMaxWidth()
                 .height(150.dp)) {
-            SelectionContainer {
-                Text(state.value.mnemonicSeed, modifier = Modifier
+            TextField(
+                value = state.value.mnemonicSeed,
+                onValueChange = {createWalletViewModel.onEvent(CreateWalletUIEvent.MnemonicSeedChanged(it))},
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = { localFocus.clearFocus() }),
+                modifier = Modifier
                     .padding(10.dp)
-                    .semantics { this.contentDescription = "Mnemonic Seed Words" })
-            }
+                    .semantics { this.contentDescription = "Mnemonic Seed Words" }
+            )
         }
         Row {
             ElevatedButton(onClick = { createWalletViewModel.onEvent(CreateWalletUIEvent.CreateButtonClicked) }, modifier = Modifier.padding(vertical = 15.dp)) {

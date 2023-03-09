@@ -1,6 +1,7 @@
 package com.example.byowsigner
 
 import android.content.Context
+import com.example.byowsigner.api.ExtendedPubkeyService
 import com.example.byowsigner.api.MnemonicSeedService
 import com.example.byowsigner.api.TransactionParserService
 import com.example.byowsigner.api.TransactionSignerService
@@ -14,4 +15,5 @@ class AppContainer(applicationContext: Context) {
     var walletRepository = WalletRepository(db.walletDao())
     val transactionParserService: TransactionParserService = TransactionParserService()
     val transactionSignerService: TransactionSignerService = TransactionSignerService()
+    val extendedPubkeyService: ExtendedPubkeyService = ExtendedPubkeyService()
 }

@@ -14,8 +14,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.byowsigner.ui.domain.CreateWalletUIEvent
+import com.example.byowsigner.ui.domain.ExportWatchOnlyWalletUIEvent
 import com.example.byowsigner.ui.domain.SignTransactionUIEvent
 import com.example.byowsigner.ui.viewmodels.CreateWalletViewModel
+import com.example.byowsigner.ui.viewmodels.ExportWatchOnlyWalletViewModel
 import com.example.byowsigner.ui.viewmodels.SignTransactionViewModel
 import kotlinx.coroutines.launch
 
@@ -23,7 +25,8 @@ import kotlinx.coroutines.launch
 fun ByowHome(
     modifier: Modifier = Modifier,
     createWalletViewModel: CreateWalletViewModel,
-    signTransactionViewModel: SignTransactionViewModel
+    signTransactionViewModel: SignTransactionViewModel,
+    exportWatchOnlyWalletViewModel: ExportWatchOnlyWalletViewModel
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -38,6 +41,17 @@ fun ByowHome(
                     navController.navigateSingleTopTo(mainScreenRoute)
                 }
                 is CreateWalletUIEvent.CreateButtonClicked -> {
+                    navController.navigateSingleTopTo(mainScreenRoute)
+                }
+                else -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = context) {
+        exportWatchOnlyWalletViewModel.sharedEvent.collect { event ->
+            when(event) {
+                is ExportWatchOnlyWalletUIEvent.CancelButtonClicked -> {
                     navController.navigateSingleTopTo(mainScreenRoute)
                 }
                 else -> {}
@@ -91,7 +105,7 @@ fun ByowHome(
                     SignTransactionScreen(signTransactionViewModel = signTransactionViewModel)
                 }
                 composable(route = ExportWatchOnlyWalletMenu.route) {
-                    ExportWatchOnlyWalletScreen(wallets = signTransactionViewModel.wallets)
+                    ExportWatchOnlyWalletScreen(wallets = signTransactionViewModel.wallets, exportWatchOnlyWalletViewModel = exportWatchOnlyWalletViewModel)
                 }
             }
         }

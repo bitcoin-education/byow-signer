@@ -13,7 +13,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.imeAction
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,7 +28,6 @@ fun SignTransactionScreen(
 ) {
     val state = signTransactionViewModel.signTransactionUIState
     val wallets by signTransactionViewModel.wallets.observeAsState(initial = emptyList())
-    var expanded by remember { mutableStateOf(false) }
     val localFocus = LocalFocusManager.current
     val transactionDetails: TransactionDetailsUIState? by signTransactionViewModel.transactionDetails.observeAsState()
 
@@ -67,35 +65,11 @@ fun SignTransactionScreen(
             }
             Spacer(modifier = Modifier.height(15.dp))
         }
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded },
-            modifier = Modifier.padding(vertical = 15.dp)
-        ) {
-            TextField(
-                readOnly = true,
-                value = state.value.selectedWallet,
-                onValueChange = {},
-                label = { Text("Select a wallet") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                modifier = Modifier.semantics { this.imeAction = ImeAction.Done }
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ) {
-                wallets.forEach { wallet ->
-                    DropdownMenuItem(
-                        text = { Text(wallet.name) },
-                        onClick = {
-                            signTransactionViewModel.onEvent(SignTransactionUIEvent.SelectedWalletChanged(wallet.name))
-                            expanded = false
-                        },
-                    )
-                }
-            }
-        }
+        WalletSelect(
+            selectedWallet = state.value.selectedWallet,
+            wallets = wallets,
+            onClick = { signTransactionViewModel.onEvent(SignTransactionUIEvent.SelectedWalletChanged(it)) }
+        )
         WalletFormInput(
             text = state.value.password,
             onTextChanged = {

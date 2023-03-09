@@ -7,6 +7,7 @@ import com.example.byowsigner.database.AppDatabase
 import com.example.byowsigner.database.WalletRepository
 import com.example.byowsigner.ui.screen.ByowHome
 import com.example.byowsigner.ui.viewmodels.CreateWalletViewModel
+import com.example.byowsigner.ui.viewmodels.ExportWatchOnlyWalletViewModel
 import com.example.byowsigner.ui.viewmodels.SignTransactionViewModel
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.Before
@@ -39,6 +40,10 @@ abstract class BaseTest {
                     appContainer.walletRepository,
                     appContainer.transactionParserService,
                     appContainer.transactionSignerService
+                ),
+                exportWatchOnlyWalletViewModel = ExportWatchOnlyWalletViewModel(
+                    appContainer.walletRepository,
+                    appContainer.extendedPubkeyService
                 )
             )
         }

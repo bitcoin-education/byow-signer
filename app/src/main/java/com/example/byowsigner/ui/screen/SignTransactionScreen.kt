@@ -1,8 +1,8 @@
 package com.example.byowsigner.ui.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -11,12 +11,16 @@ import androidx.compose.ui.unit.dp
 import com.example.byowsigner.ui.viewmodels.SignTransactionViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
+import com.example.byowsigner.R
 import com.example.byowsigner.ui.domain.SignTransactionUIEvent
 import com.example.byowsigner.ui.domain.TransactionDetailsUIState
 
@@ -108,10 +112,36 @@ fun SignTransactionScreen(
                     .verticalScroll(rememberScrollState())) {
                     Text(text = "Signed Transaction", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { this.contentDescription = "Signed transaction" })
                     Spacer(modifier = Modifier.height(15.dp))
-                    SelectionContainer {
-                        Text(text = signTransactionViewModel.signedTransaction.value)
+                    if (!signTransactionViewModel.qrCodeToggle.value) {
+                        TextField(
+                            value = signTransactionViewModel.signedTransaction.value,
+                            onValueChange = {},
+                            readOnly = true,
+                            colors = TextFieldDefaults.textFieldColors(
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Image(
+                            painter = rememberQrBitmapPainter(content = signTransactionViewModel.signedTransaction.value, size = 280.dp),
+                            contentDescription = "QR Code",
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier.fillMaxSize(),
+                        )
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
+                    IconButton(
+                        onClick = { signTransactionViewModel.onEvent(SignTransactionUIEvent.QRCodeButtonClicked) },
+                        modifier = Modifier.semantics { contentDescription = "QR code button" }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.qr_code),
+                            contentDescription = "QR code icon",
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
                     TextButton(
                         onClick = {
                             signTransactionViewModel.onEvent(SignTransactionUIEvent.DoneButtonClicked)

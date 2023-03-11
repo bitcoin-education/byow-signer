@@ -8,4 +8,5 @@ sealed class SignTransactionUIEvent {
     object CancelButtonClicked: SignTransactionUIEvent()
     object DoneButtonClicked: SignTransactionUIEvent()
     object ModalDismissed: SignTransactionUIEvent()
+    object QRCodeButtonClicked : SignTransactionUIEvent()
 }

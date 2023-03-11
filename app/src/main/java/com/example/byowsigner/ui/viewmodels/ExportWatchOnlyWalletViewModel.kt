@@ -27,6 +27,8 @@ class ExportWatchOnlyWalletViewModel(
 
     val sharedEvent = MutableSharedFlow<ExportWatchOnlyWalletUIEvent>()
 
+    val qrCodeToggle = mutableStateOf(false)
+
     fun onEvent(event: ExportWatchOnlyWalletUIEvent) {
         when(event) {
             is ExportWatchOnlyWalletUIEvent.PasswordChanged -> {
@@ -47,6 +49,9 @@ class ExportWatchOnlyWalletViewModel(
             }
             ExportWatchOnlyWalletUIEvent.ModalDismissed -> {
                 openDialog.value = false
+            }
+            ExportWatchOnlyWalletUIEvent.QRCodeButtonClicked -> {
+                qrCodeToggle.value = !qrCodeToggle.value
             }
         }
     }

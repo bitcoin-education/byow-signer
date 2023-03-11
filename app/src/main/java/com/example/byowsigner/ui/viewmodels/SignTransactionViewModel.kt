@@ -38,6 +38,7 @@ class SignTransactionViewModel(
 
     val openDialog = mutableStateOf(false)
 
+    val qrCodeToggle = mutableStateOf(false)
     fun onEvent(event: SignTransactionUIEvent) {
         when(event) {
             is SignTransactionUIEvent.PasswordChanged -> {
@@ -60,8 +61,8 @@ class SignTransactionViewModel(
                 openDialog.value = false
                 cancel()
             }
-
             SignTransactionUIEvent.ModalDismissed -> openDialog.value = false
+            SignTransactionUIEvent.QRCodeButtonClicked -> qrCodeToggle.value = !qrCodeToggle.value
         }
     }
 

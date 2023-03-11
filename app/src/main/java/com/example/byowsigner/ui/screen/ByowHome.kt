@@ -68,7 +68,6 @@ fun ByowHome(
         }
     }
 
-    NewWalletToast(signTransactionViewModel.wallets)
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {

@@ -1,5 +1,6 @@
 package com.example.byowsigner.ui.viewmodels
 
+import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,9 @@ class CreateWalletViewModel(
 
     val sharedEvent = MutableSharedFlow<CreateWalletUIEvent>()
 
+    val formOk: Boolean
+        get() = _walletUIState.value.name.isNotBlank() && _walletUIState.value.mnemonicSeed.isNotBlank()
+
     fun onEvent(event: CreateWalletUIEvent) {
         when(event) {
             is CreateWalletUIEvent.NameChanged -> {
@@ -44,6 +48,7 @@ class CreateWalletViewModel(
             is CreateWalletUIEvent.MnemonicSeedChanged -> {
                 _walletUIState.value = _walletUIState.value.copy(mnemonicSeed = event.value)
             }
+            else -> {}
         }
     }
 
@@ -51,9 +56,20 @@ class CreateWalletViewModel(
 
     private fun createWallet() {
         val wallet = _walletUIState.value.run { Wallet(name, mnemonicSeed, Date()) }
-        walletRepository.insertWallet(wallet)
-        clearInputs()
-        viewModelScope.launch { sharedEvent.emit(CreateWalletUIEvent.CreateButtonClicked) }
+        walletRepository.insertWallet(
+            wallet = wallet,
+            onError = {
+                val message = when(it) {
+                    is SQLiteConstraintException -> "Could not create wallet: repeated name."
+                    else -> "Could not create wallet: unknown error"
+                }
+                viewModelScope.launch { sharedEvent.emit(CreateWalletUIEvent.RepeatedNameError(message)) }
+            },
+            onSuccess = {
+                clearInputs()
+                viewModelScope.launch { sharedEvent.emit(CreateWalletUIEvent.CreateButtonClicked) }
+            }
+        )
     }
 
     private fun cancel() {

@@ -29,6 +29,10 @@ class ExportWatchOnlyWalletViewModel(
 
     val qrCodeToggle = mutableStateOf(false)
 
+    val formOk: Boolean
+        get() = _exportWatchOnlyWalletUIState.value.selectedWallet.isNotBlank() &&
+                _exportWatchOnlyWalletUIState.value.selectedWallet != "Select a wallet"
+
     fun onEvent(event: ExportWatchOnlyWalletUIEvent) {
         when(event) {
             is ExportWatchOnlyWalletUIEvent.PasswordChanged -> {

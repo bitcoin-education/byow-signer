@@ -2,6 +2,7 @@
 
 package com.example.byowsigner.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -43,6 +44,10 @@ fun ByowHome(
                 is CreateWalletUIEvent.CreateButtonClicked -> {
                     navController.navigateSingleTopTo(mainScreenRoute)
                 }
+                is CreateWalletUIEvent.RepeatedNameError -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT)
+                        .show()
+                }
                 else -> {}
             }
         }
@@ -63,6 +68,7 @@ fun ByowHome(
         signTransactionViewModel.sharedEvent.collect { event ->
             when(event) {
                 is SignTransactionUIEvent.CancelButtonClicked -> navController.navigateSingleTopTo(mainScreenRoute)
+                is SignTransactionUIEvent.InvalidTransactionError -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 else -> {}
             }
         }

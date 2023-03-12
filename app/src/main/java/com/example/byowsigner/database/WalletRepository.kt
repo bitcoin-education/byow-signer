@@ -11,9 +11,12 @@ class WalletRepository(private val walletDao: WalletDao) {
 
     fun findWalletByName(name: String) = walletDao.findByName(name)
 
-    fun insertWallet(wallet: Wallet) {
+    fun insertWallet(wallet: Wallet, onError: (Throwable) -> Unit = {}, onSuccess: () -> Unit = {}) {
         coroutineScope.launch(Dispatchers.IO) {
-            walletDao.insertAll(wallet)
+            kotlin.runCatching {
+                walletDao.insertAll(wallet)
+            }.onSuccess { onSuccess() }
+            .onFailure { e -> onError(e) }
         }
     }
 }

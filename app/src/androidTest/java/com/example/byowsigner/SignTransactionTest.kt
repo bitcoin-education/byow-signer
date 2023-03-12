@@ -44,4 +44,29 @@ class SignTransactionTest : BaseTest() {
         composeTestRule.onNodeWithContentDescription("Signed transaction")
             .assertIsDisplayed()
     }
+
+    @Test
+    fun shouldNotSignInvalidTransaction() {
+        val transactionJson = """
+            {"utxos":[{"derivationPath":"84'/0'/0'/0/0","amount":1.00000000,"addressType":"SEGWIT"},{"derivationPath":"84'/0'/0'/0/1","amount":1.00000000,"addressType":"SEGWIT"}],"transaction":"asdf1234"}
+        """.trimIndent()
+
+        composeTestRule.onNodeWithContentDescription("Menu")
+            .performClick()
+        composeTestRule.onNodeWithText("Sign Transaction")
+            .performClick()
+        composeTestRule.onNodeWithContentDescription("Transaction json")
+            .performTextInput(transactionJson)
+        composeTestRule.onNodeWithText("Select a wallet")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.onNodeWithText(name)
+            .performClick()
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText("Sign")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.onNodeWithContentDescription("Signed transaction")
+            .assertDoesNotExist()
+    }
 }

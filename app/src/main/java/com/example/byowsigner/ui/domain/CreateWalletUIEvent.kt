@@ -5,5 +5,6 @@ sealed class CreateWalletUIEvent {
     object MnemonicSeedGenerateButtonClicked: CreateWalletUIEvent()
     object CreateButtonClicked: CreateWalletUIEvent()
     object CancelButtonClicked: CreateWalletUIEvent()
+    data class RepeatedNameError(val message: String) : CreateWalletUIEvent()
     data class MnemonicSeedChanged(val value: String): CreateWalletUIEvent()
 }

@@ -87,6 +87,12 @@ fun SignTransactionScreen(
                 .padding(vertical = 15.dp)
                 .semantics { this.contentDescription = "Wallet password" }
         )
+        ElevatedButton(
+            onClick = { signTransactionViewModel.onEvent(SignTransactionUIEvent.SHA256ButtonClicked) },
+            modifier = Modifier.padding(vertical = 15.dp),
+        ) {
+            Text("SHA256")
+        }
         Row {
             ElevatedButton(
                 onClick = { signTransactionViewModel.onEvent(SignTransactionUIEvent.SignButtonClicked) },

@@ -13,4 +13,5 @@ sealed class ExportWatchOnlyWalletUIEvent {
 
     object ModalDismissed: ExportWatchOnlyWalletUIEvent()
     object QRCodeButtonClicked : ExportWatchOnlyWalletUIEvent()
+    object SHA256ButtonClicked : ExportWatchOnlyWalletUIEvent()
 }

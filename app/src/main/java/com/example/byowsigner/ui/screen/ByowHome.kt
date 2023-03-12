@@ -43,6 +43,8 @@ fun ByowHome(
                 }
                 is CreateWalletUIEvent.CreateButtonClicked -> {
                     navController.navigateSingleTopTo(mainScreenRoute)
+                    Toast.makeText(context,"Wallet created!", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 is CreateWalletUIEvent.RepeatedNameError -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT)

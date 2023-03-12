@@ -27,7 +27,6 @@ fun LoginScreen(
     exportWatchOnlyWalletViewModel: ExportWatchOnlyWalletViewModel
 ) {
     val authenticated = remember { mutableStateOf(false) }
-    NewWalletToast(signTransactionViewModel.wallets)
     if (!authenticated.value) {
         Authenticate { authenticated.value = it }
     } else {

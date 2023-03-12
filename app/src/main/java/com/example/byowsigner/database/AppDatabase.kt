@@ -5,6 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.byowsigner.BuildConfig
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 
 @Database(entities = [Wallet::class], version = 1)
 @TypeConverters(Converters::class)
@@ -24,11 +27,15 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private fun buildDatabase(context: Context) = Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            DB_NAME
-        ).fallbackToDestructiveMigration().build()
+        private fun buildDatabase(context: Context): AppDatabase {
+            val passphrase: ByteArray = SQLiteDatabase.getBytes(BuildConfig.DATABASE_PASSWORD.toCharArray())
+            val factory = SupportFactory(passphrase)
+            return Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java,
+                DB_NAME
+            ).fallbackToDestructiveMigration().openHelperFactory(factory).build()
+        }
 
     }
 }

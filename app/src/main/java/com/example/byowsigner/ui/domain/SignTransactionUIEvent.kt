@@ -9,5 +9,6 @@ sealed class SignTransactionUIEvent {
     object DoneButtonClicked: SignTransactionUIEvent()
     object ModalDismissed: SignTransactionUIEvent()
     object QRCodeButtonClicked : SignTransactionUIEvent()
+    object SHA256ButtonClicked : SignTransactionUIEvent()
     data class InvalidTransactionError(val message: String) : SignTransactionUIEvent()
 }

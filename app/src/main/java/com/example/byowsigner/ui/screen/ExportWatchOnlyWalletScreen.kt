@@ -24,6 +24,7 @@ import androidx.lifecycle.LiveData
 import com.example.byowsigner.R
 import com.example.byowsigner.database.Wallet
 import com.example.byowsigner.ui.domain.ExportWatchOnlyWalletUIEvent
+import com.example.byowsigner.ui.domain.SignTransactionUIEvent
 import com.example.byowsigner.ui.viewmodels.ExportWatchOnlyWalletViewModel
 
 
@@ -62,6 +63,12 @@ fun ExportWatchOnlyWalletScreen(
                 .padding(vertical = 15.dp)
                 .semantics { this.contentDescription = "Wallet password" }
         )
+        ElevatedButton(
+            onClick = { exportWatchOnlyWalletViewModel.onEvent(ExportWatchOnlyWalletUIEvent.SHA256ButtonClicked) },
+            modifier = Modifier.padding(vertical = 15.dp),
+        ) {
+            Text("SHA256")
+        }
         Row {
             ElevatedButton(
                 onClick = {exportWatchOnlyWalletViewModel.onEvent(ExportWatchOnlyWalletUIEvent.ExportButtonClicked)},

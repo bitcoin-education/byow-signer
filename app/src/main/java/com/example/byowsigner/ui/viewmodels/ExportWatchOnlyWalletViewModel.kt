@@ -10,8 +10,10 @@ import com.example.byowsigner.ByowApplication
 import com.example.byowsigner.api.ExtendedPubkeyService
 import com.example.byowsigner.database.WalletRepository
 import com.example.byowsigner.ui.domain.*
+import io.github.bitcoineducation.bitcoinjava.Sha256
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import org.bouncycastle.util.encoders.Hex
 
 class ExportWatchOnlyWalletViewModel(
     val walletRepository: WalletRepository,
@@ -57,7 +59,14 @@ class ExportWatchOnlyWalletViewModel(
             ExportWatchOnlyWalletUIEvent.QRCodeButtonClicked -> {
                 qrCodeToggle.value = !qrCodeToggle.value
             }
+            ExportWatchOnlyWalletUIEvent.SHA256ButtonClicked -> sha256()
         }
+    }
+
+    private fun sha256() {
+        _exportWatchOnlyWalletUIState.value = _exportWatchOnlyWalletUIState.value.copy(
+            password = Sha256.hashToHex(Hex.toHexString(_exportWatchOnlyWalletUIState.value.password.toByteArray()))
+        )
     }
 
     private fun exportExtendedPubkeys() {

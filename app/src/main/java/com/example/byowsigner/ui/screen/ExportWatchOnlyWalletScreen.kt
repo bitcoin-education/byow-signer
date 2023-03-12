@@ -63,7 +63,11 @@ fun ExportWatchOnlyWalletScreen(
                 .semantics { this.contentDescription = "Wallet password" }
         )
         Row {
-            ElevatedButton(onClick = {exportWatchOnlyWalletViewModel.onEvent(ExportWatchOnlyWalletUIEvent.ExportButtonClicked)}, modifier = Modifier.padding(vertical = 15.dp)) {
+            ElevatedButton(
+                onClick = {exportWatchOnlyWalletViewModel.onEvent(ExportWatchOnlyWalletUIEvent.ExportButtonClicked)},
+                modifier = Modifier.padding(vertical = 15.dp),
+                enabled = exportWatchOnlyWalletViewModel.formOk
+            ) {
                 Text("Export")
             }
             ElevatedButton(onClick = {exportWatchOnlyWalletViewModel.onEvent(ExportWatchOnlyWalletUIEvent.CancelButtonClicked)}, modifier = Modifier.padding(vertical = 15.dp, horizontal = 15.dp)) {

@@ -39,6 +39,12 @@ class SignTransactionViewModel(
     val openDialog = mutableStateOf(false)
 
     val qrCodeToggle = mutableStateOf(false)
+
+    val formOk: Boolean
+        get() = _signTransactionUIState.value.transactionJson.isNotBlank() &&
+                _signTransactionUIState.value.selectedWallet.isNotBlank() &&
+                _signTransactionUIState.value.selectedWallet != "Select a wallet"
+
     fun onEvent(event: SignTransactionUIEvent) {
         when(event) {
             is SignTransactionUIEvent.PasswordChanged -> {
@@ -63,20 +69,25 @@ class SignTransactionViewModel(
             }
             SignTransactionUIEvent.ModalDismissed -> openDialog.value = false
             SignTransactionUIEvent.QRCodeButtonClicked -> qrCodeToggle.value = !qrCodeToggle.value
+            else -> {}
         }
     }
 
     private fun signTransaction() {
         viewModelScope.launch {
-            walletRepository.findWalletByName(_signTransactionUIState.value.selectedWallet).collect {
-                val unsignedTransaction = parseUnsignedTransaction()
-                signedTransaction.value = transactionSignerService.signTransaction(
-                    unsignedTransaction.transaction,
-                    it.mnemonicSeed!!,
-                    _signTransactionUIState.value.password,
-                    parseUnsignedTransaction().utxos
-                )
-                openDialog.value = true
+            kotlin.runCatching {
+                walletRepository.findWalletByName(_signTransactionUIState.value.selectedWallet).collect {
+                    val unsignedTransaction = parseUnsignedTransaction()
+                    signedTransaction.value = transactionSignerService.signTransaction(
+                        unsignedTransaction.transaction,
+                        it.mnemonicSeed!!,
+                        _signTransactionUIState.value.password,
+                        parseUnsignedTransaction().utxos
+                    )
+                    openDialog.value = true
+                }
+            }.onFailure {
+                viewModelScope.launch { sharedEvent.emit(SignTransactionUIEvent.InvalidTransactionError("Could not sign transaction: invalid transaction")) }
             }
         }
     }

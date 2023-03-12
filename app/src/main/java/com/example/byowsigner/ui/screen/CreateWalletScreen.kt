@@ -2,10 +2,8 @@ package com.example.byowsigner.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -75,7 +73,11 @@ fun CreateWalletScreen(
             )
         }
         Row {
-            ElevatedButton(onClick = { createWalletViewModel.onEvent(CreateWalletUIEvent.CreateButtonClicked) }, modifier = Modifier.padding(vertical = 15.dp)) {
+            ElevatedButton(
+                onClick = { createWalletViewModel.onEvent(CreateWalletUIEvent.CreateButtonClicked) },
+                modifier = Modifier.padding(vertical = 15.dp),
+                enabled = createWalletViewModel.formOk
+            ) {
                 Text("Create")
             }
             ElevatedButton(onClick = { createWalletViewModel.onEvent(CreateWalletUIEvent.CancelButtonClicked) }, modifier = Modifier.padding(vertical = 15.dp, horizontal = 15.dp)) {

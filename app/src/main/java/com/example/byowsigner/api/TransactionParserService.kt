@@ -31,7 +31,7 @@ class TransactionParserService {
                     TransactionOutputUIState(
                         address = when(it.scriptPubkey.type) {
                             Script.P2PKH -> it.scriptPubkey.p2pkhAddress(AddressPrefixFactory.getPrefix(it.scriptPubkey.type))
-                            Script.P2SH -> it.scriptPubkey.p2shAddress(AddressPrefixFactory.getPrefix(it.scriptPubkey.type))
+                            Script.P2SH -> it.scriptPubkey.nestedSegwitAddress(AddressPrefixFactory.getPrefix(it.scriptPubkey.type))
                             Script.P2WPKH -> it.scriptPubkey.p2wpkhAddress(AddressPrefixFactory.getPrefix(it.scriptPubkey.type))
                             else -> throw NotImplementedError("Script type not implemented: ${it.scriptPubkey.type}")
                         },
